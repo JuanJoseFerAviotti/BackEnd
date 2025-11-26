@@ -1,0 +1,273 @@
+*{
+  transition: all 0.5s ease;
+}
+
+html, body {
+  display: flex;
+  height: 100%;
+  margin: 0;
+  flex-direction: column;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  font-family: sans-serif;
+}
+
+.upper-band{
+  background: var(--yellow);
+  width: 100%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.login-box{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 40px;
+  
+}
+.navbar{
+  background-color: #ffc800;
+}
+.nav-link{
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.form-control{
+  display: none;
+}
+img#userImage , img#userImageedit{
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+.bi-exclamation-tirangle-fill{
+  scale: 1.5;
+}
+.navbar-toggler{
+  height: 50px !important;
+  width: 50px;
+}
+.logo {
+      width: 150px;
+      height: 150px;
+      background: #202020; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 4rem;
+      font-weight: bold;
+      color: #FFBB00;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      border-radius: 20px; /* rounds edges */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+:root{
+  --yellow: #ffc800;  /* amarillo principal */
+  --bg: #ffffff;
+  --text: #222;
+}
+#contenedorDeProfileInfo{
+  border-radius: 15px;
+  box-shadow: 0 .25rem .55rem rgba(0, 0, 0, .5);
+  width: 75vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+#contenedorDeProfileInfo h2{
+  height: 50%;
+  margin: 0;
+}
+#contenedorDeProfileInfo p{
+  transform: translateY(7px);
+  height: 50%;
+  margin: 0;
+  margin-top: 5%;
+}
+#upload{
+ width: 150px; 
+ margin-left :15px;
+ 
+}
+#contenedorDeProfileInfoEditing{
+  border-radius: 15px;
+  box-shadow: 0 .25rem .55rem rgba(0, 0, 0, .5);
+  width: 75vh;
+  display: none;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+#contenedorDeProfileInfoEditing h2{
+  font-size: 2rem;
+  height: 50%;
+  margin: 0;
+}
+#contenedorDeProfileInfoEditing p{
+  transform: translateY(7px);
+  height: 50%;
+  margin: 0;
+  margin-top: 5%;
+}
+#contenedorDeProfileInfoEditing input{
+  border-style: solid;
+  
+  transform: translateX(-11.5px);
+  
+  padding-left: 10px;
+  border-radius: 20px;
+ 
+  
+  margin-top: 4.5%;
+}
+
+.line{
+  width: 30%;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#line{
+  display: flex;
+  flex-direction: column;
+  
+  align-items: center;  
+}
+.lineBlock{
+  height: 30%;
+}
+.line input{
+  width: 90%;
+}
+#contenedorDelBotonP{
+  flex-direction: row-reverse;
+  width: 70vh;
+  display: flex;
+  z-index: 20;
+}
+#btUpdateP:hover{
+  transform: translateY(1px);
+  scale: 1.05;
+  box-shadow: 0 .6rem 1rem rgba(0, 0, 0, .5);
+
+}
+#btUpdateP{
+  background-color: #FFBB00;
+  margin-right: 4%;
+  border: 0;
+  transition: all 1s ease;
+  box-shadow: 0 .25rem .55rem rgba(0, 0, 0, .5);
+  border-radius:0 0 15px 15px ;
+  width: 130px;
+  height: 45px;
+}
+
+footer {
+  margin-top: auto;
+  background: #FFBB00;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  bottom: 0;
+}
+.container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  
+}
+@media (min-width: 992px) {
+  #contenedorDeProfileInfo{
+    flex: 0 0 auto;
+    width: 100%;
+  }
+   #contenedorDeProfileInfoEditing{
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  #contenedorMain{
+    width: 550px;
+  }
+  #contenedorDeProfileInfo{
+    flex: 0 0 auto;
+    width: 550px !important;
+  }
+  #contenedorDeProfileInfoEditing{
+    flex: 0 0 auto;
+    width: 550px !important;
+  }
+  .lineBlock{
+  height: 40%;
+  }
+  #contenedorDelBotonP{
+    width: 550px;
+  }
+  #contenedorDelBotonP{
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  #ContenedorMain{
+    flex-direction: column;
+    margin: 0 auto;
+    display: flex;
+    width: 100%;
+  }
+  #contenedorDeProfileInfo{
+    flex-direction: column;
+    width: 320px !important;
+  }
+
+  #contenedorDeProfileInfoEditing{
+    flex-direction: column;
+    width: 320px !important;
+  }
+  .line{
+    height: 300px;
+    width: 320px;
+    margin-left: 20px;
+    flex-direction: column;
+  }
+  #contenedorSize{
+    width: 320px;
+  }
+  .lineBlock{
+    height: 125px;
+    flex-direction: column;
+  }
+  #contenedorDelBotonP{
+    width: 100%;
+  }
+  footer p{
+    font-size: 0.7rem;
+  }
+}
+.dark-mode{
+  background-color: #121212 !important;
+  color: white !important;
+}
+.light-mode{
+  background-color: white !important;
+  color: black !important;
+}
+.mode {
+  transition: background 0.3s, color 0.3s;
+}

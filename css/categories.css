@@ -1,0 +1,77 @@
+/* All */
+.jumbotron,
+.card-body,
+.container,
+.site-header {
+  font-family: 'Verdana', serif !important;
+}
+*{
+  transition: all ease 0.5s;
+}
+
+/* Header */
+.navbar{
+  background-color: #ffc800;
+  height: 70px;
+  display: flex;
+  justify-content: space-around;
+}
+.nav-link{
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.navbar-toggler{
+  height: 50px !important;
+  width: 50px;
+}
+.navbar-nav{
+    display: flex;
+    justify-content: space-evenly !important;
+}
+#carrito {
+    height: 40px;
+    width: 40px;
+    background-image: url(../img/carrito-gris-oscuro.svg);
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+@media (max-width: 991px){
+  .navbar-nav {
+    z-index: 100;
+    padding: 10px;
+    border-radius: 0px 10px 30px 10px;
+    background-color: #202020;
+  }
+  .navbar-collapse{
+    z-index: 20;
+  }
+  .nav-link{
+    color: wheat !important;
+    margin-top: 5px;
+  }
+  #carrito{
+    background-color: #ffbb00;
+    border-radius: 10px;
+    margin: 5px;
+  }
+}
+/* Functions */
+.dark-mode{
+  background-color: #121212 !important;
+  color: white !important;
+}
+.light-mode{
+  background-color: white !important;
+  color: black !important;
+}
+.mode {    
+      transition: background 0.3s, color 0.3s;
+}
+/*  Main \ center */
+
+#cat-list-container{
+  margin-top: 10px;
+  border-radius: 10px;
+}

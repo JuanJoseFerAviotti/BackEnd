@@ -1,0 +1,151 @@
+#main{
+ margin-top: 40px;
+ justify-content: center;    
+}
+
+html, body {
+ 
+  display: flex;
+  flex-direction: column;
+
+  font-family: sans-serif;
+}@media(min-width: 900px){
+#main{
+     display: flex;
+  flex-direction: row;
+     
+}
+
+.card {max-width: 20%;height: 300px!important ;}
+
+
+input:invalid {
+  border: 2px solid rgb(196, 0, 0);
+}
+
+select:invalid {
+  border: 2px solid rgb(196, 0, 0);
+}
+
+
+}
+@media(max-width: 900px){
+   .card {
+    max-width: 80%;
+    height: 310px!important ;
+    align-self: center;
+}
+#main{
+     display: flex;
+  flex-direction: column;
+     
+}
+#cart-container {
+    max-width: 100%;
+
+}}#cart-container {
+    
+    box-shadow: rgb(0, 0, 0) 0px 0px 8px;
+}
+.TextCompra{
+     display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+margin: 10px 20px;
+}
+.cardproducto{
+    width: 100%;
+}
+  .card-producto{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        
+        
+        border-top: 1px solid black;
+    
+        
+    }.card-img{
+        height: 100px;
+        width: auto;
+        max-height: 100px;
+        object-fit: contain;
+    }
+    .cart-price{
+        margin-left: auto;
+        margin-right: 20px;
+        font-weight: 900;
+    }
+
+.card-right{
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+    ;
+    
+    
+}.card-total{
+   
+    justify-content: space-between;
+  
+}
+.cart-details{
+    width: 80%;
+    width: 100%;
+}
+.navbar{
+  background-color: #ffc800;
+}
+.navbar-toggler{
+  height: 50px !important;
+  width: 50px;
+}
+footer {
+  margin-top: auto;
+  background: #FFBB00;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  bottom: 0;
+}
+
+.card-producto {
+    padding: 1rem;
+    border-top: 1px solid black;
+}
+
+.cantidad-input {
+    max-width: 70px;
+    margin-left: auto;
+}
+
+.cart-price {
+    font-weight: 900;
+}
+
+@media (max-width: 576px) {
+    .card-producto .row > div {
+        text-align: center;
+    }
+    
+    .card-right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+}
+#checkoutTabContent .card {
+      max-width: 100% !important;
+      height: auto !important;
+      width: 100% !important;
+    }
+    
+    #checkoutTabContent .card-body {
+      height: auto !important;
+      min-height: auto !important;
+    }
+    i {
+        color: black;
+    }
