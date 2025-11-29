@@ -92,9 +92,6 @@ app.get('/sell/publish', (req, res) => {
 });
 
 
-app.listen(port, () => {
-    console.log(`Servidor escuchando en http://localhost:${port}`);
-});
 
 
 //cart
@@ -137,33 +134,6 @@ app.get("/cart", (req, res) => {
     res.json(cart);
 });
 
-// Agregar producto
-app.post("/cart/add", (req, res) => {
-    const { username, product } = req.body;
-
-  /*   if (!username || !product) {
-        return res.status(400).json({ msg: "Falta username o product" });
-    } */
-
-    // ejemplo de carrito en memoria
-    if (!global.cart) global.cart = {};
-
-    if (!global.cart[username]) global.cart[username] = [];
-
-    // buscar si ya existe
-    const existing = global.cart[username].find(p => p.id === product.id);
-
-    if (existing) {
-        existing.count += 1;
-    } else {
-        global.cart[username].push({ ...product, count: 1 });
-    }
-
-    return res.json({
-        msg: "Producto agregado",
-        cart: global.cart[username]
-    });
-});
 
 // Modificar cantidad
 app.put("/cart/:index", (req, res) => {
@@ -182,4 +152,9 @@ app.delete("/cart/:index", (req, res) => {
 
     cart.splice(index, 1);
     res.json({ msg: "Producto eliminado", cart });
+});
+
+
+app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
 });

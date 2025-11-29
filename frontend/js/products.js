@@ -57,14 +57,19 @@ function showCarsList(array){
         };
 
         try {
-            const response = await fetch("http://localhost:3000/cart/add", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: User.usuario,   // ← cambiar por usuario logueado
-                    product: productoParaCarrito
-                })
-            });
+            const token = localStorage.getItem("token");
+
+const response = await fetch("http://localhost:3000/cart/add", {
+    method: "POST",
+    headers: { 
+        "Content-Type": "application/json",
+        "access-token": token   // 👈 NECESARIO
+    },
+    body: JSON.stringify({
+        username: User.usuario,
+        product: productoParaCarrito
+    })
+});
 
             const data = await response.json();
             console.log("Carrito actualizado:", data.cart);
