@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>eMercado - Todo lo que busques está aquí</title>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <link rel="stylesheet" href=" css/cart.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body class="light-mode">
+  <nav class="navbar navbar-expand-lg navbar-light p-1">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-exclamation-triangle-fill" width="32" height="32"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav w-100 justify-content-between">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="categories.html">Categorías</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="sell.html">Vender</a>
+          </li>
+          
+         <li><a class="nav-link" href="#">Mis Compras</a></li>
+           <li><a class="nav-link" href="login.html">Cerrar Sesion</a></li>
+           <button type="button" id="modeButton" class="btn btn-dark">Modo oscuro</button>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main id="main">
+    <div id="cart-container" class="list-group list-group-numbered m-3">
+    </div>
+
+    <!-- Tabs con Bootstrap -->
+    <div class="m-3" id="tabs">
+      <ul class="nav nav-tabs mb-3" id="checkoutTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active mode" id="resumen-tab" data-bs-toggle="tab" data-bs-target="#resumen" type="button" role="tab" aria-controls="resumen" aria-selected="true">
+            <i class="bi bi-receipt mode"> Resumen</i> 
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link mode" id="envio-tab" data-bs-toggle="tab" data-bs-target="#envio" type="button" role="tab" aria-controls="envio" aria-selected="false">
+            <i class="bi bi-truck mode"> Envío</i> 
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link mode" id="direccion-tab" data-bs-toggle="tab" data-bs-target="#direccion" type="button" role="tab" aria-controls="direccion" aria-selected="false">
+            <i class="bi bi-geo-alt mode"> Dirección</i> 
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link mode" id="pago-tab" data-bs-toggle="tab" data-bs-target="#pago" type="button" role="tab" aria-controls="pago" aria-selected="false">
+            <i class="bi bi-credit-card mode"> Pago</i>
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content mode" id="checkoutTabContent">
+        <!-- Tab Resumen -->
+        <div class="tab-pane fade show active" id="resumen" role="tabpanel" aria-labelledby="resumen-tab">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="bi bi-receipt"></i> Resumen de Compra</h5>
+            </div>
+            <div class="card-body mode">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span>Artículos en el carrito:</span>
+                <span id="cart-count" class="badge bg-danger rounded-pill">0</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Productos:</span>
+                <span id="costo">$0</span>
+              </div>
+              <div class="d-flex justify-content-between mb-3">
+                <span>Envío:</span>
+                <span id="costoEnvio">$0</span>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between fw-bold fs-5">
+                <span>Total:</span>
+                <span id="CostoTotal">$0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Tipo de envío -->
+        <div class="tab-pane fade" id="envio" role="tabpanel" aria-labelledby="envio-tab">
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0"><i class="bi bi-truck"></i> Tipo de Envío</h5>
+            </div>
+            <div class="card-body mode">
+              <p class="text-muted mb-3">Selecciona tu tipo de envío preferido</p>
+              <div class="form-check mb-3">
+                <input class="form-check-input shipping-type" type="radio" name="shippingType" id="premium" value="15" data-name="Premium 2 a 5 días (15%)">
+                <label class="form-check-label" for="premium">
+                  <strong>Premium 2 a 5 días (15%)</strong>
+                  <small class="d-block text-muted">Envío super rápido</small>
+                </label>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input shipping-type" type="radio" name="shippingType" id="express" value="7" data-name="Express 5 a 8 días (7%)">
+                <label class="form-check-label" for="express">
+                  <strong>Express 5 a 8 días (7%)</strong>
+                  <small class="d-block text-muted">Envío rápido</small>
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input shipping-type" type="radio" name="shippingType" id="standard" value="5" data-name="Standard 12 a 15 días (5%)" checked>
+                <label class="form-check-label" for="standard">
+                  <strong>Standard 12 a 15 días (5%)</strong>
+                  <small class="d-block text-muted">Envío económico</small>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Dirección -->
+        <div class="tab-pane fade" id="direccion" role="tabpanel" aria-labelledby="direccion-tab">
+          <div class="card">
+            <div class="card-header bg-info text-white">
+              <h5 class="mb-0"><i class="bi bi-geo-alt"></i> Dirección de Envío</h5>
+            </div>
+            <div class="card-body mode">
+              <p class="text-muted mb-3">Ingresa la dirección donde recibirás tu pedido</p>
+              <div class="mb-3">
+                <label for="department" class="form-label">Departamento *</label>
+                <input id="department" class="form-control" type="text" placeholder="Ej: Montevideo" required>
+              </div>
+              <div class="mb-3">
+                <label for="locality" class="form-label">Localidad *</label>
+                <input id="locality" class="form-control" type="text" placeholder="Ej: Centro" required>
+              </div>
+              <div class="mb-3">
+                <label for="street" class="form-label">Calle *</label>
+                <input id="street" class="form-control" type="text" placeholder="Ej: Av. 18 de Julio" required>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="number" class="form-label">Número *</label>
+                  <input id="number" class="form-control" type="text" placeholder="Ej: 1234" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="corner" class="form-label">Esquina</label>
+                  <input id="corner" class="form-control" type="text" placeholder="Ej: Río Negro">
+                </div>
+              </div>
+              <small class="text-muted">* Campos obligatorios</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Forma de pago -->
+        <div class="tab-pane fade" id="pago" role="tabpanel" aria-labelledby="pago-tab">
+          <div class="card">
+            <div class="card-header bg-warning">
+              <h5 class="mb-0"><i class="bi bi-credit-card"></i> Forma de Pago</h5>
+            </div>
+            <div class="card-body mode">
+              <p class="text-muted mb-3">Selecciona tu método de pago preferido</p>
+              <div class="form-check mb-3">
+                <input class="form-check-input payment-type" type="radio" name="paymentType" id="creditCard" value="creditCard" data-name="Tarjeta de crédito" checked>
+                <label class="form-check-label" for="creditCard">
+                  <strong><i class="bi bi-credit-card"></i> Tarjeta de crédito</strong>
+                  <small class="d-block text-muted">Visa, Mastercard, American Express</small>
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input payment-type" type="radio" name="paymentType" id="bankTransfer" value="bankTransfer" data-name="Transferencia bancaria">
+                <label class="form-check-label" for="bankTransfer">
+                  <strong><i class="bi bi-bank"></i> Transferencia bancaria</strong>
+                  <small class="d-block text-muted">Realiza la transferencia directamente</small>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button id="btnComprar" class="btn btn-warning w-100 py-3 fw-bold fs-5">
+          <i class="bi bi-check-circle"></i> Finalizar Compra
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-muted">
+    <div class="container">
+      <p class="">
+        <a href="principalNavBar">Volver arriba</a>
+      </p>
+      <p>Este sitio forma parte de <a href="https://jovenesaprogramar.edu.uy/" target="_blank">Jovenes a Programar</a></p>
+    </div>
+  </footer>
+ 
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/init.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
