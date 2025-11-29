@@ -1,6 +1,4 @@
-// ---------------------------
-// CONFIG BACKEND
-// ---------------------------
+
 const API_URL = "http://localhost:3000/cart";
 
 // Obtener carrito del backend
@@ -43,9 +41,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   await formarCarrito();
   tiposDeEnvios();
   formasDePago();
-  chequeosAlComprar();
+  //chequeosAlComprar();
   actualizarEnvioYTotales();
 });
+
+function tiposDeEnvios() {
+  document.querySelectorAll('.shipping-type').forEach(r => {
+    r.addEventListener('change', () => {
+      actualizarEnvioYTotales();
+    });
+  });
+}
 
 async function formarCarrito() {
   const cartContainer = document.getElementById("cart-container");
