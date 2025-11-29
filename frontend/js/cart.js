@@ -3,9 +3,22 @@ const API_URL = "http://localhost:3000/cart";
 
 // Obtener carrito del backend
 async function getCart() {
-  const res = await fetch(API_URL);
-  return await res.json();
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("usuario"));
+    const username = user.usuario;
+
+    const res = await fetch(`http://localhost:3000/cart/${username}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "access-token": token
+        }
+    });
+
+    return await res.json();
 }
+
+
 
 // Guardar carrito completo en backend (PUT)
 async function saveCart(cart) {
@@ -27,6 +40,7 @@ async function deleteItemFromBackend(id) {
 
 async function cambiarPesosADolar() {
   const cart = await getCart();
+  console.log("DEBUG cart =", cart);
   cart.forEach(item => {
     if (item.currency === "UYU") {
       item.cost = Math.round(item.cost * 0.025);
