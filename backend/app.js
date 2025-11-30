@@ -220,3 +220,4 @@ console.log("Guardando carrito para usuario:", username);
         res.status(500).json({ msg: "Error guardando carrito" });
     }
 });
+//para que ande el sql yo lo abri con xampp y abri shell de mysql y ejecute:mysql -u root -p y SOURCE [inserte_ruta]/ecommerce.sql;
