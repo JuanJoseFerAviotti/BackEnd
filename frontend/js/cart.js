@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await formarCarrito();
   tiposDeEnvios();
   formasDePago();
-  //chequeosAlComprar();
+  chequeosAlComprar();
   actualizarEnvioYTotales();
 });
 
@@ -434,3 +434,85 @@ function validarCamposPago() {
   
   return true;
 }
+async function chequeosAlComprar() {
+  const btn = document.getElementById('btnComprar');
+  
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    const cart = await getCart();
+    
+    const departmento = (document.getElementById('department').value || '').trim();
+    const localidad = (document.getElementById('locality').value || '').trim();
+    const calle = (document.getElementById('street').value || '').trim();
+    const numero = (document.getElementById('number').value || '').trim();
+    if (!departmento || !localidad || !calle || !numero) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Por favor completa los campos de dirección obligatorios."
+        });
+      return;
+    }
+    
+    if (!validarCamposPago()) {
+      return;
+    }
+    
+    const envioSel = document.querySelector('input[name="shippingType"]:checked');
+    const pagoSel = document.querySelector('input[name="paymentType"]:checked');
+    
+    let paymentData = { method: pagoSel.value || '', name: pagoSel.dataset.name || '' };
+    
+    if (pagoSel.value === 'creditCard') {
+      paymentData.cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '').slice(-4); // Solo últimos 4 dígitos
+      paymentData.cardName = document.getElementById('cardName').value;
+    } else if (pagoSel.value === 'bankTransfer') {
+      paymentData.bankName = document.getElementById('bankName').value;
+      paymentData.accountHolder = document.getElementById('accountHolder').value;
+      paymentData.accountType = document.getElementById('accountType').value;
+    }
+    
+    const orden = {
+      cart,
+      shipping: { name: envioSel.dataset.name || '', pct: parseFloat(envioSel.value || 0) },
+      address: {
+        departmento, localidad, calle, numero, esquina: (document.getElementById('corner').value || '').trim()
+      },
+      payment: paymentData,
+      date: new Date().toISOString()
+    };
+    
+    localStorage.setItem('lastOrder', JSON.stringify(orden));
+
+await guardarCarritoSQL(JSON.parse(localStorage.getItem("usuario")).usuario, cart);
+      
+    
+    Swal.fire({
+    title: "Compra realizada con éxito.!",
+    icon: "success",
+    draggable: true
+    });
+    formarCarrito(); 
+  });
+}
+async function guardarCarritoSQL(username, cart) {
+    const token = localStorage.getItem("token");
+
+    const items = cart.map(p => ({
+        id: p.id,
+        count: p.count
+    }));
+
+    const res = await fetch("http://localhost:3000/cart/save", {
+        method: "POST",
+        headers: { 
+            "Content-Type": "application/json",
+            "access-token": token
+        },
+        body: JSON.stringify({ username, items })
+    });
+
+    const data = await res.json();
+    console.log("Respuesta SQL:", data);
+}
+

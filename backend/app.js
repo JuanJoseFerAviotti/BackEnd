@@ -6,11 +6,16 @@ const app = express();
 const port = 3000;
 const jwt = require('jsonwebtoken');
 
+ //si usás base de datos descomentá esto
+const pool = require("./db");
+
+ 
+
 const SECRET_KEY = "mi_clave_secreta_super_segura";
 
 app.use(cors());
 app.use(express.json());
-
+ 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     if (username && password) {
@@ -20,6 +25,30 @@ app.post('/login', (req, res) => {
         res.status(401).json({ status: "error", msg: "Usuario o contraseña incorrectos" });
     }
 });
+ /*  //version de login  sql
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const [rows] = await db.query(
+            "SELECT username FROM usuario WHERE username = ? AND password = ?",
+            [username, password]
+        );
+
+        if (rows.length === 0) {
+            return res.status(401).json({ msg: "Usuario o contraseña incorrectos" });
+        }
+
+        const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
+
+        res.json({ token, status: "ok" });
+
+    } catch (err) {
+        console.error("ERROR en login:", err);
+        res.status(500).json({ error: "Error en servidor" });
+    }
+});  */
+
 
 const verificarToken = (req, res, next) => {
     const token = req.headers['access-token']; 
@@ -92,6 +121,14 @@ app.get('/sell/publish', (req, res) => {
 });
 
 
+app.get("/usuarios", async (req, res) => {
+    try {
+        const [rows] = await pool.query("SELECT * FROM usuario");
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 //cart
@@ -157,4 +194,29 @@ app.delete("/cart/:index", (req, res) => {
 
 app.listen(port, () => {
     console.log(`Servidor escuchando en http://localhost:${port}`);
+});
+
+app.post("/cart/save", verificarToken, async (req, res) => {
+    const { username, items } = req.body;
+
+    if (!username || !items || !Array.isArray(items)) {
+        return res.status(400).json({ msg: "Datos inválidos" });
+    }
+console.log("Guardando carrito para usuario:", username);
+    try {
+        for (const item of items) {
+            const { id, count } = item;
+
+            await pool.query(
+                "INSERT INTO carrito (username, id_producto, cantidad_productos) VALUES (?, ?, ?)",
+                [username, id, count]
+            );
+        }
+
+        res.json({ msg: "Carrito guardado en SQL correctamente" });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Error guardando carrito" });
+    }
 });
