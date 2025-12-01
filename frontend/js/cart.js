@@ -523,6 +523,7 @@ function chequeosAlComprar() {
     icon: "success",
     draggable: true
     });
+    guardarCarritoSQL(JSON.parse(localStorage.getItem("usuario")).usuario)
     formarCarrito(); 
   });
 }
