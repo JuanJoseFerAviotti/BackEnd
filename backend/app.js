@@ -130,6 +130,13 @@ app.get("/usuarios", async (req, res) => {
     }
 });
 
+
+//cart
+
+app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
+});
+
 app.post("/cart/save", verificarToken, async (req, res) => {
     const { username, items } = req.body;
 
