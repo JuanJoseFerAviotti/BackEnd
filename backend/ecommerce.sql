@@ -49,9 +49,8 @@ CREATE TABLE carrito (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50),
     id_producto INT,
-    cantidad_productos INT,
-    FOREIGN KEY (username) REFERENCES usuario(username),
-    FOREIGN KEY (id_producto) REFERENCES productos(id)
+    cantidad_productos INT
+  
 );
 
 -- ============================

@@ -1,75 +1,30 @@
 
-const API_URL = "http://localhost:3000/cart";
-
-// Obtener carrito del backend
-async function getCart() {
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("usuario"));
-    const username = user.usuario;
-
-    const res = await fetch(`http://localhost:3000/cart/${username}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "access-token": token
-        }
-    });
-
-    return await res.json();
-}
-
-
-
-// Guardar carrito completo en backend (PUT)
-async function saveCart(cart) {
-  await fetch(API_URL, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(cart)
-  });
-}
-
-// Eliminar item individual
-async function deleteItemFromBackend(id) {
-  await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-}
-
-// ---------------------------
-// LOGICA ORIGINAL ADAPTADA
-// ---------------------------
-
-async function cambiarPesosADolar() {
-  const cart = await getCart();
-  console.log("DEBUG cart =", cart);
-  cart.forEach(item => {
-    if (item.currency === "UYU") {
-      item.cost = Math.round(item.cost * 0.025);
-      item.currency = "USD";
+function cambiarPesosADolar(){
+  const cartProuct = JSON.parse(localStorage.getItem("cart"))
+  cartProuct.forEach(element => {
+    if(element.currency === "UYU" ){
+      element.cost = Math.round((element.cost*0.025))
+      
+      element.currency = "USD"
     }
+    console.log(cartProuct)
+    localStorage.setItem("cart", JSON.stringify(cartProuct));
   });
-  await saveCart(cart);
 }
-
-document.addEventListener("DOMContentLoaded", async () => {
-  await cambiarPesosADolar();
-  await formarCarrito();
+document.addEventListener("DOMContentLoaded", () => {
+  
+  cambiarPesosADolar();
+  formarCarrito();
   tiposDeEnvios();
   formasDePago();
   chequeosAlComprar();
   actualizarEnvioYTotales();
 });
 
-function tiposDeEnvios() {
-  document.querySelectorAll('.shipping-type').forEach(r => {
-    r.addEventListener('change', () => {
-      actualizarEnvioYTotales();
-    });
-  });
-}
-
-async function formarCarrito() {
+function formarCarrito() {
   const cartContainer = document.getElementById("cart-container");
-  const cart = await getCart();
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+   
 
   if (!cartContainer) return;
 
@@ -84,12 +39,23 @@ async function formarCarrito() {
         </a>
       </div>
     `;
-    document.getElementById("btnComprar").disabled = true;
+    const CostoTotal = document.getElementById("costo");
+    const CostoEnvio = document.getElementById("costoEnvio");
+    const TotalPrice = document.getElementById("CostoTotal");
+    const BotonComprar = document.getElementById("btnComprar");
+    if (BotonComprar) {
+      BotonComprar.disabled = true;
+    }
+    if (CostoTotal) CostoTotal.textContent = "";
+    if (CostoEnvio) CostoEnvio.textContent = "";
+    if (TotalPrice) TotalPrice.textContent = "";
+    
     actualizarContadorCarrito();
     return;
   }
 
   cartContainer.innerHTML = "";
+
   cart.forEach((item, index) => {
     const totalCost = item.cost * item.count;
 
@@ -116,11 +82,11 @@ async function formarCarrito() {
                      value="${item.count}" 
                      min="1" 
                      class="cantidad-input form-control mb-2" 
-                     data-index="${index}">
+                     data-index="${index}"
+                     data-cost="${item.cost}"
+                     data-currency="${item.currency}">
               <div class="cart-price mb-2">Total: ${item.currency} ${totalCost}</div>
-              <button class="btn btn-sm btn-outline-danger remove-btn" data-id="${item.id}">
-                Eliminar
-              </button>
+              <button class="btn btn-sm btn-outline-danger remove-btn" data-index="${index}" title="Eliminar producto">Eliminar</button>
             </div>
           </div>
         </div>
@@ -134,55 +100,56 @@ async function formarCarrito() {
     input.addEventListener('change', actualizarCantidad);
 
     const removeBtn = cartItem.querySelector('.remove-btn');
-    removeBtn.addEventListener('click', async () => {
-      await deleteItemFromBackend(removeBtn.dataset.id);
-      await formarCarrito();
+    removeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(removeBtn.dataset.index, 10);
+      removeItem(idx);
     });
   });
+
+  
+  const cartTotal = cart.reduce((sum, item) => sum + (item.cost * item.count), 0);
+  const envioC = cart.reduce((sum, item) => sum + (100 * item.count), 0);
+  const totalprice = cartTotal + envioC;
+  const currency = cart[0].currency || "$";
+
+  const CostoTotal = document.getElementById("costo");
+  const CostoEnvio = document.getElementById("costoEnvio");
+  const TotalPrice = document.getElementById("CostoTotal");
+
+  if (CostoTotal) CostoTotal.innerHTML = `${currency} ${cartTotal}`;
+  if (CostoEnvio) CostoEnvio.innerHTML = `${currency} ${envioC}`;
+  if (TotalPrice) TotalPrice.innerHTML = `${currency} ${totalprice}`;
 
   actualizarContadorCarrito();
   actualizarEnvioYTotales();
 }
 
-async function actualizarCantidad(e) {
-  const input = e.target;
-  const newCount = parseInt(input.value);
-  const index = parseInt(input.dataset.index);
 
-  let cart = await getCart();
-  cart[index].count = newCount;
-
-  await saveCart(cart);
-  await formarCarrito();
+function removeItem(index) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (index < 0 || index >= cart.length) return;
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  formarCarrito();
 }
 
-async function actualizarContadorCarrito() {
-  const cart = await getCart();
-  const cartCount = document.getElementById("cart-count");
-  if (cartCount) {
-    const totalItems = cart.reduce((sum, item) => sum + item.count, 0);
-    cartCount.textContent = totalItems;
+function actualizarContadorCarrito() {
+  try {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartCount = document.getElementById("cart-count");
+    if (cartCount) {
+        const totalItems = cart.reduce((sum, item) => sum + item.count, 0);
+        cartCount.textContent = totalItems;
+    }
+  } catch (e) {
+    localStorage.removeItem("cart");
+    const cartCount = document.getElementById("cart-count");
+    if (cartCount) {
+      cartCount.textContent = 0;
+      cartCount.style.display = 'none';
+    }
   }
-}
-
-function porcentajeSeleccionado() {
-  const sel = document.querySelector('input[name="shippingType"]:checked');
-  return sel ? parseFloat(sel.value) : 5;
-}
-
-async function actualizarEnvioYTotales() {
-  const cart = await getCart();
-  if (cart.length === 0) return;
-
-  const currency = cart[0].currency;
-  const subtotal = cart.reduce((sum, item) => sum + item.cost * item.count, 0);
-  const pct = porcentajeSeleccionado();
-  const shippingCost = subtotal * (pct / 100);
-  const total = subtotal + shippingCost;
-
-  document.getElementById("costo").innerHTML = `${currency} ${subtotal.toFixed(2)}`;
-  document.getElementById("costoEnvio").innerHTML = `${currency} ${shippingCost.toFixed(2)}`;
-  document.getElementById("CostoTotal").innerHTML = `${currency} ${total.toFixed(2)}`;
 }
 
 // Modo oscuro/claro
@@ -232,6 +199,73 @@ function toggleMode(isDark) {
     } catch (e) {
     }
   }
+}
+
+
+function actualizarCantidad(e) {
+    const input = e.target;
+    const newCount = parseInt(input.value);
+    const itemIndex = parseInt(input.dataset.index);
+    const cost = parseFloat(input.dataset.cost);
+    const currency = input.dataset.currency;
+
+    if (newCount < 1) {
+        input.value = 1;
+        return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart[itemIndex].count = newCount;
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    const cartPrice = input.parentElement.querySelector('.cart-price');
+    const totalCost = cost * newCount;
+    cartPrice.textContent = `Total: ${currency} ${totalCost}`;
+
+    const cartTotal = cart.reduce((sum, item) => sum + (item.cost * item.count), 0);
+    const envioC = cart.reduce((sum, item) => sum + (100 * item.count), 0);
+    const totalprice = cartTotal + envioC;
+
+    const CostoTotal = document.getElementById("costo");
+    const CostoEnvio = document.getElementById("costoEnvio");
+    const TotalPrice = document.getElementById("CostoTotal");
+
+    if (CostoTotal) CostoTotal.innerHTML = `${currency} ${cartTotal}`;
+   
+    actualizarEnvioYTotales();
+    actualizarContadorCarrito();
+}
+
+
+function porcentajeSeleccionado() {
+  const sel = document.querySelector('input[name="shippingType"]:checked');
+  return sel ? parseFloat(sel.value) : 5;
+}
+
+
+function actualizarEnvioYTotales() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const currency = cart.length > 0 ? cart[0].currency : "$";
+  const subtotal = cart.reduce((sum, item) => sum + (item.cost * item.count), 0);
+  const pct = porcentajeSeleccionado();
+  const shippingCost = +(subtotal * (pct / 100));
+  const total = subtotal + shippingCost;
+
+  const CostoTotal = document.getElementById("costo");
+  const CostoEnvio = document.getElementById("costoEnvio");
+  const TotalPrice = document.getElementById("CostoTotal");
+
+  if (CostoTotal) CostoTotal.innerHTML = `${currency} ${subtotal.toFixed(2)}`;
+  if (CostoEnvio) CostoEnvio.innerHTML = `${currency} ${shippingCost.toFixed(2)}`;
+  if (TotalPrice) TotalPrice.innerHTML = `${currency} ${total.toFixed(2)}`;
+}
+
+function tiposDeEnvios() {
+  document.querySelectorAll('.shipping-type').forEach(r => {
+    r.addEventListener('change', () => {
+      actualizarEnvioYTotales();
+    });
+  });
 }
 
 function mostrarCamposPago(tipo) {
@@ -434,12 +468,12 @@ function validarCamposPago() {
   
   return true;
 }
-async function chequeosAlComprar() {
+
+function chequeosAlComprar() {
   const btn = document.getElementById('btnComprar');
-  
   if (!btn) return;
-  btn.addEventListener('click', async () => {
-    const cart = await getCart();
+  btn.addEventListener('click', () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
     
     const departmento = (document.getElementById('department').value || '').trim();
     const localidad = (document.getElementById('locality').value || '').trim();
@@ -483,20 +517,20 @@ async function chequeosAlComprar() {
     };
     
     localStorage.setItem('lastOrder', JSON.stringify(orden));
-
-await guardarCarritoSQL(JSON.parse(localStorage.getItem("usuario")).usuario, cart);
-      
-    
+    localStorage.removeItem('cart');
     Swal.fire({
     title: "Compra realizada con éxito.!",
     icon: "success",
     draggable: true
     });
+    guardarCarritoSQL(JSON.parse(localStorage.getItem("usuario")).usuario)
     formarCarrito(); 
   });
 }
-async function guardarCarritoSQL(username, cart) {
+
+async function guardarCarritoSQL(username) {
     const token = localStorage.getItem("token");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const items = cart.map(p => ({
         id: p.id,
